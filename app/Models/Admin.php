@@ -17,4 +17,16 @@ class Admin extends Model
         'user_id',
         'username',
     ];
+
+
+    /**
+     * ------------------------------------------------
+     * define inheri relation with User model
+     * ------------------------------------------------
+     * @return [type]
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
