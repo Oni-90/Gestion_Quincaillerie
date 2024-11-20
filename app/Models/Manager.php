@@ -5,23 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Client extends Model
+class Manager extends Model
 {
     use HasFactory;
 
-    /**
-     * Summary of fillable
-     * @var array
-     */
-    protected $fillable =[
+    protected $fillable = [
         'user_id',
         'address',
     ];
 
     /**
      * -------------------------------------------------------
-     * define inherit relation with User model
-     * -------------------------------------------------------
+     * define inherit relation between user model and manager 
+     * --------------------------------------------------------
      * @return [type]
      */
     public function user()

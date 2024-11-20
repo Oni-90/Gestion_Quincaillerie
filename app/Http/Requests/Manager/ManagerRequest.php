@@ -1,10 +1,10 @@
 <?php
 
-    namespace App\Http\Requests\Client;
+    namespace App\Http\Requests\Manager;
 
     use Illuminate\Foundation\Http\FormRequest;
 
-    class ClientRequest extends FormRequest
+    class ManagerRequest extends FormRequest
     {
         /**
          * Determine if the user is authorized to make this request.
@@ -21,7 +21,6 @@
          */
         public function rules(): array
         {
-            $id = $this->route('id');
             return [
                 
                 /**
