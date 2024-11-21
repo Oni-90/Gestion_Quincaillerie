@@ -2,14 +2,11 @@
 
     namespace App\Services\Manager;
 
-use App\Http\Resources\Manager\ManagerResource;
-use App\Models\User;
-use App\Repositories\Manager\ManagerRepository;
+    use App\Http\Resources\Manager\ManagerResource;
+    use App\Repositories\Manager\ManagerRepository;
     use App\Repositories\Auth\AuthRepository;
     use Exception;
     use Illuminate\Http\Request;
-
-use function Laravel\Prompts\error;
 
     class ManagerService
     {
@@ -84,14 +81,7 @@ use function Laravel\Prompts\error;
          */
         public function find($id)
         {
-            $manager = $this->managerRepository->find($id); //find manager
-
-            //check that the $manager isn't null
-            if(is_null($manager)){
-                return response()->json([
-                    'message' => "Aucun résultat correspondant.",
-                ],404);
-            }
+            $manager = $this->findManager($id); //find manager
 
             //return retrieve manager
             return response()->json([
@@ -112,14 +102,8 @@ use function Laravel\Prompts\error;
         public function update($id, Request $request)
         {
             try {
-                    $findManager = $this->managerRepository->find($id); //find manager to update
+                    $findManager = $this->findManager($id); //find manager to update
 
-                    //check that this data isn't null
-                    if(is_null($findManager)){
-                        return response()->json([
-                            'error' => 'Cet utilisateur n\'esxite pas.',
-                        ],404);
-                    }
                     $userData = $request->only([
                         'email',
                         'password',
@@ -132,9 +116,9 @@ use function Laravel\Prompts\error;
                     $managerData = $request->only([
                         'address',
                     ]);
-                    $this->managerRepository->update($id, $managerData); //update manager data
+                    $this->managerRepository->update($findManager->id, $managerData); //update manager data
 
-                    $data = new ManagerResource($this->managerRepository->find($id)); //create new ManagerResource
+                    $data = new ManagerResource($findManager); //create new ManagerResource
 
             } catch (Exception $exception) {
                 return $exception;
@@ -157,14 +141,8 @@ use function Laravel\Prompts\error;
          */
         public function delete($id)
         {
-            $findManager = $this->managerRepository->find($id); //find manager to delete
+            $findManager = $this->findManager($id); //find manager to delete
 
-            //check that data isn't null
-            if(is_null($findManager)){
-                return response()->json([
-                    'message' => "Cet utilisateur n'existe pas.",
-                ],404);
-            }
             $this->authRepository->delete($findManager->user_id); //delete userManager
 
             //return success delete message
@@ -183,18 +161,33 @@ use function Laravel\Prompts\error;
         {
             $manager = $this->managerRepository->all(); //get all manager in database to show
 
-            //check that $manager isn't null
-            if(is_null($manager)){
-                return response()->json([
-                    'message' => "Aucun manager enregistré pour le moment.",
-                ],200);
-            }
-
             //return list
             return response()->json([
-                'message' => "Liste des tous les managers.",
+                'message' => "Liste des tous les managers :",
                 'managers' => $manager,
             ],200);
         }
 
+
+
+
+        /**
+         * ------------------------------------------------
+         * private function to find manager
+         * ------------------------------------------------
+         * @param int $id
+         * 
+         * @return [type]
+         */
+        private function findManager(int $id)
+        {
+            $manager = $this->managerRepository->find($id); //find manager
+
+            //check that manager exist
+            if(!$manager){
+                throw new \Illuminate\Database\Eloquent\ModelNotFoundException('Cet utilisateur n\'existe pas'); //throw error
+            }
+
+            return $manager;
+        }
     }

@@ -27,11 +27,15 @@
             ];
         }
 
+        /**
+         * message to show at rule violation
+         */
         public function messages()
         {
             return [
-                'name.unique' => "Cette catégorie existe déjà.",
-                "name.required" => "Le nom est requis."
+                'name.unique' => "Une catégorie avec ce nom existe déjà.",
+                "name.required" => "Le nom est requis.",
+                'description.max' => "La description est trop longue."
             ];
         }
     }

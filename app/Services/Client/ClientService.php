@@ -3,12 +3,10 @@
     namespace App\Services\Client;
 
     use App\Http\Resources\Client\ClientResource;
-    use App\Models\User;
     use App\Repositories\Client\ClientRepository;
     use App\Repositories\Auth\AuthRepository;
     use Exception;
     use Illuminate\Http\Request;
-use Illuminate\Support\Js;
 
     class ClientService 
     {
@@ -84,12 +82,7 @@ use Illuminate\Support\Js;
          */
         public function find($id)
         {
-            $client = $this->clientRepository->find($id); //find client
-            if(is_null($client)){
-                return response()->json([
-                    'message' => "Aucun résultat correspondant.",
-                ],404);
-            }
+            $client = $this->findClient($id); //find client
 
             //return retrieve client
             return response()->json([
@@ -110,14 +103,8 @@ use Illuminate\Support\Js;
         public function update($id,Request $request)
         {
             try {
-                    $findClient = $this->clientRepository->find($id); //find client to update
+                    $findClient = $this->findClient($id); //find client to update
 
-                    //check if client retrieve isn't null
-                    if(is_null($findClient)){
-                        return response()->json([
-                            'erreur' => "Cet utilisateur n'existe pas",
-                        ],404);
-                    }
                     $userData = $request->only([
                         'email',
                         'phone',
@@ -130,9 +117,9 @@ use Illuminate\Support\Js;
                     $clientData = $request->only([
                         'address',
                     ]);
-                    $this->clientRepository->update($id,$clientData); //update client data
+                    $this->clientRepository->update($findClient->id,$clientData); //update client data
 
-                    $data = new ClientResource($this->clientRepository->find($id)); //create new ClientResource
+                    $data = new ClientResource($findClient); //create new ClientResource
 
             } catch (Exception $exception) {
                 return $exception;
@@ -155,16 +142,9 @@ use Illuminate\Support\Js;
          */
         public function delete($id)
         {
-            $findClient = $this->clientRepository->find($id); //find client to delete
+            $findClient = $this->findClient($id); //find client to delete
 
-            //ensure that the client exist before delete
-            if(is_null($findClient))
-            {
-                return response()->json([
-                    'erreur' => "cet utilisateur n'existe pas.",
-                ],404);
-            }
-            $this->clientRepository->delete($findClient->user_id); //delete userClient
+            $this->authRepository->delete($findClient->user_id); //delete userClient
 
             return response()->json([
                 'message' => "Compte supprimé avec succès.",
@@ -181,17 +161,33 @@ use Illuminate\Support\Js;
         {
             $client = $this->clientRepository->all(); //retrieve all client in db
 
-            //check that $client isn't null
-            if(is_null($client)){
-                return response()->json([
-                    'message' => "Aucun client enregistré pour le moment.",
-                ],200);
-            }
-
             //return list
             return response()->json([
-                'message' => "Liste de tous les clients.",
+                'message' => "Liste de tous les clients :",
                 'clients' => $client,
             ],200);
+        }
+
+
+
+
+        /**
+         * -------------------------------------------------------
+         * private function to find client 
+         * -------------------------------------------------------
+         * @param int $id
+         * 
+         * @return [type]
+         */
+        private function findClient(int $id)
+        {
+            $client = $this->clientRepository->find($id); //find client
+
+            //check if client exist
+            if(!$client){
+                throw new \Illuminate\Database\Eloquent\ModelNotFoundException('Cet utilisateur n\'existe pas.'); //throw error
+            }
+
+            return $client;
         }
     }

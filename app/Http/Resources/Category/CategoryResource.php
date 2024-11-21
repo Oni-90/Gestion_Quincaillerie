@@ -1,22 +1,22 @@
 <?php
 
-namespace App\Http\Resources\Category;
+    namespace App\Http\Resources\Category;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
+    use Illuminate\Http\Request;
+    use Illuminate\Http\Resources\Json\JsonResource;
 
-class CategoryResource extends JsonResource
-{
-    /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
-     */
-    public function toArray(Request $request): array
+    class CategoryResource extends JsonResource
     {
-        return[
-            'name' => $this->name,
-            'description' => $this->description,
-        ];
+        /**
+         * Transform the resource into an array.
+         *
+         * @return array<string, mixed>
+         */
+        public function toArray(Request $request): array
+        {
+            return[
+                'name' => $this->name,
+                'description' => $this->description,
+            ];
+        }
     }
-}

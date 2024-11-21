@@ -20,5 +20,25 @@ class Product extends Model
         'price',
         'store_location',
         'alert_threshold',
+        'unit',
+        'slug',
+        'quantity',
+        'category_id',
     ];
+
+    protected $with = ['category']; //load category data automaticly
+
+    // protected $guarded = [];
+
+    /**
+     * ------------------------------------
+     * relationship with category
+     * ------------------------------------
+     * @return [type]
+     */
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
 }

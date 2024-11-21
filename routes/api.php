@@ -5,7 +5,8 @@
     use App\Http\Controllers\Api\V1\Category\CategoryController;
     use App\Http\Controllers\Api\V1\Client\ClientController;
     use App\Http\Controllers\Api\v1\Manager\ManagerController;
-    use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\V1\Product\ProductController;
+use Illuminate\Support\Facades\Route;
 
     //auth actions routes
     Route::controller(AuthController::class)->group(function(){
@@ -47,6 +48,14 @@
         Route::get('categories/{id}', 'show');
         Route::get('categories', 'index');
         Route::delete('categories/{id}', 'destroy');
+    });
+
+    Route::controller(ProductController::class)->group(function(){
+        Route::post('products', 'store');
+        Route::put('products/{id}','update');
+        Route::get('products/{id}', 'show');
+        Route::get('products', 'index');
+        Route::delete('products/{id}', 'destroy');
     });
 
 

@@ -2,9 +2,9 @@
 
     namespace App\Services\Category;
 
-use App\Http\Resources\Category\CategoryResource;
-use App\Repositories\Category\CategoryRepository;
-use Exception;
+    use App\Http\Resources\Category\CategoryResource;
+    use App\Repositories\Category\CategoryRepository;
+    use Exception;
 
     class CategoryService
     {
@@ -55,14 +55,7 @@ use Exception;
          */
         public function find($id)
         {
-            $category = $this->categoryRepository->find($id); //fins category
-
-            //ensure that $category isn't null
-            if(is_null($category)){
-                return response()->json([
-                    'message' => "Aucun résultat correspondant.",
-                ],404);
-            }
+            $category = $this->findCategory($id); //find category
 
             //retrn retrieve category
             return response()->json([
@@ -83,16 +76,11 @@ use Exception;
         public function update($id,array $data)
         {
           try {
-                $findCategory = $this->categoryRepository->find($id); //get category to update
+                $findCategory = $this->findCategory($id); //get category to update
 
-                //check that category exist before update
-                if(is_null($findCategory)){
-                    return response()->json([
-                        'erreur' => "Cette catégorie n'existe pas.",
-                    ],404);
-                }
-                $this->categoryRepository->update($id,$data); //update category data
-                $category = new CategoryResource($this->categoryRepository->find($id)); //stored it as resource
+                $this->categoryRepository->update($findCategory->id,$data); //update category data
+
+                $category = new CategoryResource($findCategory); //stored it as resource
 
           } catch (Exception $exception) {
             return $exception;
@@ -115,15 +103,11 @@ use Exception;
          */
         public function delete($id)
         {
-            $findCategory = $this->categoryRepository->find($id); //get category to delete
+            $findCategory = $this->findCategory($id); //get category to delete 
 
-            //check that category exist before delete
-            if(is_null($findCategory)){
-                return response()->json([
-                    'erreur' => "Cette catégorie n'existe pas.",
-                ],404);
-            }   
+            $this->categoryRepository->delete($findCategory->id); //delete category
 
+           //return success response
             return response()->json([
                 'message' => "Catégorie supprimée avec succès.",
             ],200);
@@ -141,8 +125,31 @@ use Exception;
 
             //return data retrieve
             return response()->json([
-                'message' => "Liste de toutes les catégorie avec succès :",
+                'message' => "Liste de toutes les catégories :",
                 'categories' => $category,
             ],200);
+        }
+
+
+
+
+        /**
+         * -----------------------------------------------
+         * private function to find category
+         * -----------------------------------------------
+         * @param int $id
+         * 
+         * @return [type]
+         */
+        private function findCategory(int $id)
+        {
+            $category = $this->categoryRepository->find($id); //find category
+
+            //check that the category exist
+            if(!$category){
+                throw new \Illuminate\Database\Eloquent\ModelNotFoundException('Cette catégorie n\'existe pas.'); // throw error
+            }
+
+            return $category;
         }
     }

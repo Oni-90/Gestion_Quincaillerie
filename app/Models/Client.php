@@ -18,6 +18,8 @@ class Client extends Model
         'address',
     ];
 
+    protected $with = ['user']; //load user data automaticly
+
     /**
      * -------------------------------------------------------
      * define inherit relation with User model

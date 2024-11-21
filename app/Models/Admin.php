@@ -18,6 +18,7 @@ class Admin extends Model
         'username',
     ];
 
+    protected $with = ['user']; //load user data automaticly
 
     /**
      * ------------------------------------------------
