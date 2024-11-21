@@ -30,4 +30,15 @@
                 'description' => 'nullable|string|max:255',
             ];
         }
+
+        /**
+         * rule violation function
+         */
+        public function messages()
+        {
+            return[
+                'name.unique' => "Une catégorie avec ce nom existe déjà.",
+                'description.max' => "La description est trop longue."
+            ];
+        }
     }

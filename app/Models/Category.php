@@ -17,4 +17,15 @@ class Category extends Model
         'name',
         'description',
     ];
+
+    /**
+     * -------------------------------------
+     * relationship with product
+     * ------------------------------------
+     * @return [type]
+     */
+    public function product()
+    {
+        return $this->hasMany(Product::class);
+    }
 }

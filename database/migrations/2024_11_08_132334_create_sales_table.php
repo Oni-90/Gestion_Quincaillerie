@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('sales', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('product_id')->constrained('products')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('client_id')->constrained('clients')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->float('quantity');
+            $table->string('unit')->default('Unité');
+            $table->float('total_amount');
+            $table->string('payment_status')->default('Impayé');
             $table->timestamps();
         });
     }

@@ -3,7 +3,6 @@
     namespace App\Services\Admin;
 
     use App\Http\Resources\Admin\AdminResource;
-    use App\Models\User;
     use App\Repositories\Admin\AdminRepository;
     use App\Repositories\Auth\AuthRepository;
     use Exception;
@@ -13,7 +12,6 @@
     {
         private $adminRepository;
         private $authRepository;
-
 
         /**
          * -----------------------------------------------------------
@@ -28,8 +26,6 @@
             $this->authRepository = $authRepository;
 
         }
-
-
 
         /**
          * ------------------------------------------------------
@@ -86,14 +82,7 @@
          */
         public function find($id)
         {
-            $admin = $this->adminRepository->find($id); //find admin
-
-            //ensure that $admin isn' null
-            if(is_null($admin)){
-                return response()->json([
-                    'message' => "Aucun résultat correspondant.",
-                ],404);
-            }
+            $admin = $this->findAdmin($id); //find admin
 
             //return retrieve admin
             return response()->json([
@@ -114,14 +103,8 @@
         public function update($id, Request $request)
         {
             try {
-                    $findAdmin = $this->adminRepository->find($id); //find admin to update
-
-                    //check that $findAdmin isn't null
-                    if(is_null($findAdmin)){
-                        return response()->json([
-                            'error' => "Cet utilisateur n'existe pas."
-                        ],404);
-                    }
+                    $findAdmin = $this->findAdmin($id); //find admin to update
+                    
                     $userData = $request->only([
                         'email',
                         'lastname',
@@ -134,9 +117,9 @@
                     $adminData = $request->only([
                         'username',
                     ]);
-                    $this->adminRepository->update($id,$adminData); //update admin data
+                    $this->adminRepository->update($findAdmin->id,$adminData); //update admin data
 
-                    $data = new AdminResource($this->adminRepository->find($id)); //create new adminResource
+                    $data = new AdminResource($findAdmin); //create new adminResource
 
             } catch (Exception $exception) {
                     return $exception;
@@ -159,14 +142,8 @@
          */
         public function delete($id)
         {
-            $findAdmin = $this->adminRepository->find($id); //find admin to delete
+            $findAdmin = $this->findAdmin($id); //find admin to delete
 
-            //chech that this admin data isn't null
-            if(is_null($findAdmin)){
-                return response()->json([
-                    'error' => "Cet utilisateur n'existe pas.",
-                ],404);
-            }
             $this->authRepository->delete($findAdmin->user_id); //delete userAdmin
 
             //retrun success message
@@ -188,17 +165,33 @@
         {
            $admin = $this->adminRepository->all(); //retrieve all admin existing in db
 
-           //check that admin isn't null
-           if(is_null($admin)){
-                return response()->json([
-                    'message' => "Aucun admin enregistré pour le moment.",
-                ],200);
-           }
-
            //return list
            return response()->json([
                 'message' => "Liste de tous les admins :",
                 'admins' => $admin,
            ],200);
+        } 
+
+
+
+
+        /**
+         * ----------------------------------------------------------------
+         * private function to find user Admin
+         * ----------------------------------------------------------------
+         * @param int $id
+         * 
+         * @return [type]
+         */
+        private function findAdmin(int $id)
+        {
+            $admin = $this->adminRepository->find($id); //find admin
+
+            //check if admin exist
+            if(!$admin){
+                throw new \Illuminate\Database\Eloquent\ModelNotFoundException('Cet utilisateur n\'existe pas.'); //throw error if admin doesn't exist
+            }
+
+            return $admin;
         }
     }

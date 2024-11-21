@@ -1,27 +1,29 @@
 <?php
 
-namespace App\Http\Resources\Client;
+    namespace App\Http\Resources\Client;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
+    use Illuminate\Http\Request;
+    use Illuminate\Http\Resources\Json\JsonResource;
 
-class ClientResource extends JsonResource
-{
-    /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
-     */
-    public function toArray(Request $request): array
+    class ClientResource extends JsonResource
     {
-        return [
-            'phone' => $this->user->phone,
-            'email' => $this->user->email,
-            'password' => $this->user->password,
-            'firstname' => $this->user->firstname,
-            'lastname' => $this->user->lastname,
+        /**
+         * Transform the resource into an array.
+         *
+         * @return array<string, mixed>
+         */
+        public function toArray(Request $request): array
+        {
+            return [
+                //user data
+                'phone' => $this->user->phone,
+                'email' => $this->user->email,
+                'password' => $this->user->password,
+                'firstname' => $this->user->firstname,
+                'lastname' => $this->user->lastname,
 
-            'address' => $this->address,
-        ];
+                //client data
+                'address' => $this->address,
+            ];
+        }
     }
-}
