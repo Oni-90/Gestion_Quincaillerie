@@ -13,7 +13,7 @@
 
         /**
          * ----------------------------------------------
-         * handdle constructor to call product service
+         * handdle constructor to call services
          * ----------------------------------------------
          * @param ProductService $productService
          */
@@ -24,7 +24,7 @@
 
         /**
          * ------------------------------------------
-         * create new product in db
+         * store new product
          * ------------------------------------------
          * @param ProductRequest $request
          * 
@@ -38,7 +38,7 @@
 
         /**
          * ------------------------------------------
-         * update a specific product info
+         * update product 
          * ------------------------------------------
          * @param mixed $id
          * @param UpdateProductRequest $request
@@ -53,7 +53,7 @@
 
         /**
          * ----------------------------------------
-         * find a specific product 
+         * show a product 
          * ----------------------------------------
          * @param mixed $id
          * 
@@ -66,7 +66,7 @@
 
         /**
          * -------------------------------------------
-         * delete specific product
+         * destroy a product
          * -------------------------------------------
          * @param mixed $id
          * 
@@ -79,7 +79,7 @@
 
         /**
          * -------------------------------------------
-         * get all product list
+         * get all product
          * -------------------------------------------
          * @return [type]
          */

@@ -7,13 +7,9 @@
     use App\Repositories\Auth\AuthRepository;
     use Exception;
     use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Tymon\JWTAuth\Facades\JWTAuth;
+    use Illuminate\Support\Facades\Hash;
+    use Tymon\JWTAuth\Facades\JWTAuth;
 
-
-    /**
-     * [AuthService for all authentication methods]
-     */
     class AuthService
     {
         private $authRepository;
@@ -28,8 +24,6 @@ use Tymon\JWTAuth\Facades\JWTAuth;
         {
             $this->authRepository = $authRepository;
         }
-
-
 
         /**
          * --------------------------------------------
@@ -61,21 +55,22 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
                 $cookie = cookie('jwt-token', $token, 60 * 24);
                 }
-
+            } 
+            catch (Exception $exception) {
                 return response()->json([
-                    'token' => $token,
-                    'auth' => Auth::user(),
-                    'message' => "Token généré pour l'authentification",
-                    'cookie' => $cookie,
-                ]);
-            } catch (Exception $exception) {
-                return response()->json([
-                    'error' => $exception,
+                    'message' => "Une erreur est survenue lors de la connexion.",
+                    'error' => $exception->getMessage(),
                 ],400);
             }
+
+            //return authenticated user
+            return response()->json([
+                'token' => $token,
+                'auth' => Auth::user(),
+                'message' => "Token généré pour l'authentification",
+                'cookie' => $cookie,
+            ]);
         }
-
-
 
         /**
          * ----------------------------------------------
@@ -97,7 +92,7 @@ use Tymon\JWTAuth\Facades\JWTAuth;
             } catch (\Tymon\JWTAuth\Exceptions\UserNotDefinedException $exception) {
                 return response()->json([
                     'message' => "Vous n'êtes pas authentifié",
-                    'error' => $exception
+                    'error' => $exception->getMessage()
                 ],404);
             }
         }

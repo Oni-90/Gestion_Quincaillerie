@@ -13,7 +13,7 @@
 
         /**
          * ------------------------------------------------
-         * handdle constructor for calling adminService
+         * handdle constructor for call services
          * ------------------------------------------------
          * @param AdminService $adminService
          */
@@ -24,7 +24,7 @@
 
         /**
          * ----------------------------------------------
-         * function for creating new admin in db
+         * store new admin 
          * ----------------------------------------------
          * @param AdminRequest $request
          * 
@@ -37,7 +37,7 @@
 
         /**
          * -------------------------------------------------
-         * fuction for updating a specific userAdmin data
+         * update a userAdmin
          * -------------------------------------------------
          * @param mixed $id
          * @param AdminRequest $request
@@ -51,7 +51,7 @@
 
         /**
          * ----------------------------------------------
-         * retrieve a specific userAdmin stored in db
+         *show a userAdmin
          * ----------------------------------------------
          * @param mixed $id
          * 
@@ -64,7 +64,7 @@
 
         /*
         *----------------------------------------------
-         *function for deleting a specific userAdmin
+         *destroy a userAdmin
          *---------------------------------------------
          * @param mixed $id
          * 
@@ -77,7 +77,7 @@
 
         /**
          * ----------------------------------------------
-         * getAll admin stored in db
+         * get all admins
          * ----------------------------------------------
          * @return [type]
          */

@@ -59,9 +59,12 @@
                     ],400);
                 }
                 $admin = $this->adminRepository->create($adminData); //store admin data
-                
-            } catch (Exception $exception) {
-                return $exception;
+            } 
+            catch (Exception $exception) {
+                return response()->json([
+                    'message' => "Une erreur est survenue lors de la création du compte.",
+                    'error' => $exception->getMessage(),
+                ],500);
             }
 
             //return stored data
@@ -120,9 +123,12 @@
                     $this->adminRepository->update($findAdmin->id,$adminData); //update admin data
 
                     $data = new AdminResource($findAdmin); //create new adminResource
-
-            } catch (Exception $exception) {
-                    return $exception;
+            } 
+            catch (Exception $exception) {
+                return response()->json([
+                    'message' => "Une erreur est survenue lors de la mise à des informations du comtpe.",
+                    'error' => $exception->getMessage(),
+                ],500);
             }
 
             //return updated data as resource
@@ -148,7 +154,7 @@
 
             //retrun success message
             return response()->json([
-                'message' => "Compte supprimé avec succès."
+                'message' => "Le compte a été supprimé avec succès."
             ],200);
         }
 
@@ -172,9 +178,6 @@
            ],200);
         } 
 
-
-
-
         /**
          * ----------------------------------------------------------------
          * private function to find user Admin
@@ -189,9 +192,8 @@
 
             //check if admin exist
             if(!$admin){
-                throw new \Illuminate\Database\Eloquent\ModelNotFoundException('Cet utilisateur n\'existe pas.'); //throw error if admin doesn't exist
+                throw new Exception('Cet utilisateur n\'existe pas.'); //throw error if admin doesn't exist
             }
-
             return $admin;
         }
     }

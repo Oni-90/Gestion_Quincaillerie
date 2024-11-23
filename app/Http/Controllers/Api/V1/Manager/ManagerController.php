@@ -4,8 +4,8 @@
 
     use App\Http\Controllers\Controller;
     use App\Http\Requests\Manager\ManagerRequest;
-use App\Http\Requests\Manager\UpdateMangerRequest;
-use App\Services\Manager\ManagerService;
+    use App\Http\Requests\Manager\UpdateMangerRequest;
+    use App\Services\Manager\ManagerService;
 
     class ManagerController extends Controller
     {
@@ -13,7 +13,7 @@ use App\Services\Manager\ManagerService;
 
         /**
          * ---------------------------------------------
-         * handdle constructor for manager controller
+         * handdle constructor to call services
          * ---------------------------------------------
          * @param ManagerService $managerService
          */
@@ -24,7 +24,7 @@ use App\Services\Manager\ManagerService;
 
         /**
          * ---------------------------------------------
-         * store function for creating new manager
+         * store new manager
          * ---------------------------------------------
          * @param ManagerRequest $request
          * 
@@ -37,7 +37,7 @@ use App\Services\Manager\ManagerService;
 
         /**
          * ------------------------------------------------
-         * function for updating userManger Data
+         * update userManger Data
          * ------------------------------------------------
          * @param mixed $id
          * @param ManagerRequest $request
@@ -51,7 +51,7 @@ use App\Services\Manager\ManagerService;
 
         /**
          * -------------------------------------------------
-         * retrieve a specific userManager in dataBase 
+         * show a userManager 
          * -------------------------------------------------
          * @param mixed $id
          * 
@@ -64,7 +64,7 @@ use App\Services\Manager\ManagerService;
 
         /**
          * -------------------------------------------------
-         * function for deleting userManager
+         * destroy userManager
          * -------------------------------------------------
          * @param mixed $id
          * 
@@ -77,7 +77,7 @@ use App\Services\Manager\ManagerService;
 
         /**
          * ---------------------------------------------------
-         * getAll manager stored in db
+         * get all managers 
          * ---------------------------------------------------
          * @return [type]
          */

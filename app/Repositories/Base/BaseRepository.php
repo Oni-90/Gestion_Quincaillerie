@@ -25,7 +25,6 @@
             $this->model = $model;
         }
 
-
         /**
          * Summary of create
          * @param array $attributes
@@ -35,7 +34,6 @@
         {
             return $this->model->create($attributes);
         }
-
         
         /**
          * Summary of update
@@ -48,7 +46,6 @@
             return $this->model::where('id',$id)->update($attributes);
         }
 
-
         /**
          * Summary of find
          * @param mixed $id
@@ -59,7 +56,6 @@
             return $this->model->find($id);
         }
 
-
         /**
          * Summary of all
          * @return Collection
@@ -68,7 +64,6 @@
         {
             return $this->model->all();
         }
-
 
         /**
          * Summary of delete
@@ -79,7 +74,6 @@
         {
             return $this->model->destroy($id);
         }
-
 
         /**
          * Summary of findByOtherColumn

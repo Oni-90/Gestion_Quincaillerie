@@ -18,4 +18,15 @@ class Supplier extends Model
         'address',
         'phone',
     ];
+
+    /**
+     * ---------------------------------------------------------------
+     * define relationship with order table
+     * ---------------------------------------------------------------
+     * @return [type]
+     */
+    public function order()
+    {
+        return $this->hasMany(Order::class);
+    }
 }

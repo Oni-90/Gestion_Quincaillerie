@@ -3,20 +3,24 @@
     namespace App\Http\Controllers\Api\V1\Auth;
 
     use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\AuthRequest;
-use App\Services\Auth\AuthService;
+    use App\Http\Requests\Auth\AuthRequest;
+    use App\Services\Auth\AuthService;
     use Illuminate\Http\Request;
-
 
     class AuthController extends Controller
     {
         private $authService;
 
+        /**
+         * -----------------------------------------
+         * handdle constructor for call sertvices
+         * -----------------------------------------
+         * @param AuthService $authService
+         */
         public function __construct(AuthService $authService)
         {
             $this->authService = $authService;
         }
-
 
         /**
          * -----------------------------------
@@ -30,7 +34,6 @@ use App\Services\Auth\AuthService;
         {
             return $this->authService->login($request);
         }
-
 
         /**
          * -------------------------------------

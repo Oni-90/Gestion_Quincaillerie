@@ -20,7 +20,6 @@
          */
         public function create(array $attributes): Model;
 
-
         /**
          * Summary of find
          * @param mixed $id
@@ -28,13 +27,11 @@
          */
         public function find($id): ?Model;
 
-        
         /**
          * Summary of all
          * @return \Illuminate\Support\Collection
          */
         public function all(): Collection;
-
 
         /**
          * Summary of update
@@ -44,14 +41,12 @@
          */
         public function update($id, array $attributes);
 
-
         /**
          * Summary of delete
          * @param mixed $id
          * @return void
          */
         public function delete($id);
-
 
         /**
          * Summary of findByOtherColumn

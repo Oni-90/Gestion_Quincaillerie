@@ -59,17 +59,20 @@
                     ],400);
                 }
                 $client = $this->clientRepository->create($clientData); //save client data
+            } 
+            catch (Exception $exception) {
+                return response()->json([
+                    'message' => "Une erreur est survenue lors de la création du compte.",
+                    'error' => $exception->getMessage(),
+                ],500);
+            }
 
-           } catch (Exception $exception) {
-                return $exception;
-           }
-
-           //return data stored
-           return response()->json([
-            'message' => 'Compte client créé avec succès.',
-            'user' => $user,
-            'client' => $client,
-           ],201);
+            //return data stored
+            return response()->json([
+                'message' => 'Compte créer avec succès.',
+                'user' => $user,
+                'client' => $client,
+            ],201);
         }
 
         /**
@@ -120,9 +123,12 @@
                     $this->clientRepository->update($findClient->id,$clientData); //update client data
 
                     $data = new ClientResource($findClient); //create new ClientResource
-
-            } catch (Exception $exception) {
-                return $exception;
+            } 
+            catch (Exception $exception) {
+                return response()->json([
+                    'message' => "Une erreur est survenue lors de la mise des informations.",
+                    'error' => $exception->getMessage(),
+                ],500);
             }
 
             //return updated data as ressource
@@ -147,7 +153,7 @@
             $this->authRepository->delete($findClient->user_id); //delete userClient
 
             return response()->json([
-                'message' => "Compte supprimé avec succès.",
+                'message' => "Le compte a été supprimé avec succès.",
             ],200);
         }
 
@@ -168,9 +174,6 @@
             ],200);
         }
 
-
-
-
         /**
          * -------------------------------------------------------
          * private function to find client 
@@ -185,9 +188,8 @@
 
             //check if client exist
             if(!$client){
-                throw new \Illuminate\Database\Eloquent\ModelNotFoundException('Cet utilisateur n\'existe pas.'); //throw error
+                throw new Exception('Cet utilisateur n\'existe pas.'); //throw error if doesn't exist
             }
-
             return $client;
         }
     }

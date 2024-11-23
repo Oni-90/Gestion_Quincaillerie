@@ -32,15 +32,18 @@
         public function store(array $data)
         {
             try {
-                    $product = $this->productRepository->create($data); //store new product
-
-            } catch (Exception $exception) {
-                return $exception;
+                $product = $this->productRepository->create($data); //store new product
+            } 
+            catch (Exception $exception) {
+                return response()->json([
+                    'message' => "Une erreur est survenue lors de la création du produit.",
+                    'error' => $exception->getMessage(),
+                ],500);
             }
 
             //return stored data
             return response()->json([
-                'message' => "Produit créé avec succès.",
+                'message' => "Produit créer avec succès.",
                 'produit' => $product,
             ],201);
         }
@@ -80,9 +83,12 @@
                 $this->productRepository->update($findProduct->id,$data); //update product
     
                 $product = new ProductResource($findProduct); //create new product resource
-
-            } catch (Exception $exception) {
-                return $exception;
+            } 
+            catch (Exception $exception) {
+                return response()->json([
+                    'message' => "Une erreur est survenue lors de la mise à jour du produit.",
+                    'error' => $exception->getMessage(),
+                ],500);
             }
 
             //return updated data as resource
@@ -108,7 +114,7 @@
             $this->productRepository->delete($findProduct->id); //delete product
 
             return response()->json([
-                'message' => "Produit supprimé avec succès.",
+                'message' => "Le produit {$findProduct['name']} a été supprimé avec succès.",
             ],200);
         }
 
@@ -128,9 +134,6 @@
             ],200);
         }
 
-
-
-
         /**
          * -----------------------------------------
          * private function for find product
@@ -144,9 +147,8 @@
             $product = $this->productRepository-> find($id); //find product
 
             if(!$product){
-                throw new \Illuminate\Database\Eloquent\ModelNotFoundException('Cet produit n\'existe pas'); //throw error
+                throw new Exception('Cet produit n\'existe pas.'); //throw error if doesn't exist
             }
-
             return $product;
         }
     }
