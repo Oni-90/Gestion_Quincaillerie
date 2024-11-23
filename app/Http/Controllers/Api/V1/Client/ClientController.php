@@ -13,7 +13,7 @@
 
         /**
          * ----------------------------------------------------
-         * define constructor to call client service
+         * define constructor to call services
          * ----------------------------------------------------
          * @param ClientService $clientService
          */
@@ -24,7 +24,7 @@
 
         /**
          * ----------------------------------------------------
-         * create new client in db
+         * store new client 
          * ----------------------------------------------------
          * @param ClientRequest $request
          * 
@@ -37,7 +37,7 @@
 
         /**
          * -----------------------------------------------------
-         * update a userClient data 
+         * update a userClient 
          * -----------------------------------------------------
          * @param mixed $id
          * @param ClientRequest $request
@@ -51,7 +51,7 @@
 
         /**
          * -----------------------------------------------------
-         * find a specific client stored in db
+         * show a client
          * -----------------------------------------------------
          * @param mixed $id
          * 
@@ -77,7 +77,7 @@
 
         /**
          * ---------------------------------------------------
-         * getAll client list
+         * get all clients
          * ---------------------------------------------------
          * @return [type]
          */

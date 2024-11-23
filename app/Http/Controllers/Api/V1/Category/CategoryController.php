@@ -13,7 +13,7 @@
 
         /**
          * ----------------------------------------------
-         * handdle constructor to call categoryService
+         * handdle constructor to call services
          * ----------------------------------------------
          * @param CategoryService $categoryService
          */
@@ -24,7 +24,7 @@
 
         /**
          * --------------------------------------------------
-         * function for creating new category
+         * store new category
          * --------------------------------------------------
          * @param CategoryRequest $request
          * 
@@ -38,7 +38,7 @@
 
         /**
          * ------------------------------------------------
-         * function for updating a category
+         * update a category
          * ------------------------------------------------
          * @param mixed $id
          * @param UpdateCategoryRequest $request
@@ -53,7 +53,7 @@
 
         /**
          * ---------------------------------------------
-         * find an specific category
+         * show a category
          * ---------------------------------------------
          * @param mixed $id
          * 
@@ -66,7 +66,7 @@
 
         /**
          * ---------------------------------------------
-         * function for deleting a specific category
+         * destroy a  category
          * ---------------------------------------------
          * @param mixed $id
          * 
@@ -79,7 +79,7 @@
 
         /**
          * ------------------------------------------------
-         * function for retrieving all categories in db
+         *get all categories
          * ------------------------------------------------
          * @return [type]
          */

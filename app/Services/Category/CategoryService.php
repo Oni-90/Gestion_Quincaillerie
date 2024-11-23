@@ -33,14 +33,17 @@
         {
             try {
                 $category = $this->categoryRepository->create($data); //stored new category
-
-            } catch (Exception $exception){
-                return $exception;
+            } 
+            catch (Exception $exception){
+                return response()->json([
+                    'message' => "Une erreur est survenue lors de la création de la catégorie.",
+                    'error' => $exception->getMessage(),
+                ],500);
             }
             
             //return stored data 
             return response()->json([
-                'message' => "Catégorie créée avec succès.",
+                'message' => "Catégorie créer avec succès.",
                 'category' => $category,
             ],201);
         }
@@ -81,10 +84,13 @@
                 $this->categoryRepository->update($findCategory->id,$data); //update category data
 
                 $category = new CategoryResource($findCategory); //stored it as resource
-
-          } catch (Exception $exception) {
-            return $exception;
-          }
+            } 
+            catch (Exception $exception) {
+                return response()->json([
+                    'message' => "Une erreur est survenue lors de la mise à jour de la catégorie.",
+                    'error' => $exception->getMessage(),
+                ],500);
+            }
 
             //return updated data as ressource
             return response()->json([
@@ -109,7 +115,7 @@
 
            //return success response
             return response()->json([
-                'message' => "Catégorie supprimée avec succès.",
+                'message' => "La catégorie {$findCategory['name']} a été supprimée avec succès.",
             ],200);
         }
 
@@ -130,9 +136,6 @@
             ],200);
         }
 
-
-
-
         /**
          * -----------------------------------------------
          * private function to find category
@@ -147,9 +150,8 @@
 
             //check that the category exist
             if(!$category){
-                throw new \Illuminate\Database\Eloquent\ModelNotFoundException('Cette catégorie n\'existe pas.'); // throw error
+                throw new Exception('Cette catégorie n\'existe pas.'); // throw error if dosn't exist
             }
-
             return $category;
         }
     }

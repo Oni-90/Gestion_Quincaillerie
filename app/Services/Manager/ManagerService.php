@@ -55,20 +55,25 @@
 
                     //verify the user data isn't null
                     if(is_null($user)){
-                        return 'Une erreur est survenu.';
+                        return response()->json([
+                            'message' => "Une erreur est survenue.",
+                        ],400);
                     }
                     $manager = $this->managerRepository->create($managerData); //store admin data   
-            } 
-            catch (Exception $exception) {
-                return $exception;
-            }
+                } 
+                catch (Exception $exception) {
+                    return response()->json([
+                        'message' => "Une erreur est survenue lors de la création du compte.",
+                        'error' => $exception->getMessage(),
+                    ],500);
+                }
 
-            //return data store
-            return response()->json([
-                'message' => 'Compte créer avec succès.',
-                'user' => $user,
-                'manager' => $manager,
-            ],201);
+                //return data store
+                return response()->json([
+                    'message' => 'Compte créer avec succès.',
+                    'user' => $user,
+                    'manager' => $manager,
+                ],201);
         }
 
         /**
@@ -119,10 +124,13 @@
                     $this->managerRepository->update($findManager->id, $managerData); //update manager data
 
                     $data = new ManagerResource($findManager); //create new ManagerResource
-
-            } catch (Exception $exception) {
-                return $exception;
-            }
+                } 
+            catch (Exception $exception) {
+                return response()->json([
+                    'message' => "Une erreur est survenue lors de la mise à jour des informations du compte.",
+                    'error' => $exception->getMessage(),
+                ],500);
+                }
 
             //return data updated as resource
             return response()->json([
@@ -147,7 +155,7 @@
 
             //return success delete message
             return response()->json([
-                'message' => "Compte supprimé avec succès.",
+                'message' => "Le compte a été supprimé avec succès.",
             ],200);
         }
 
@@ -168,9 +176,6 @@
             ],200);
         }
 
-
-
-
         /**
          * ------------------------------------------------
          * private function to find manager
@@ -185,9 +190,8 @@
 
             //check that manager exist
             if(!$manager){
-                throw new \Illuminate\Database\Eloquent\ModelNotFoundException('Cet utilisateur n\'existe pas'); //throw error
+                throw new Exception('Cet utilisateur n\'existe pas'); //throw error if doesn't esxist
             }
-
             return $manager;
         }
     }
