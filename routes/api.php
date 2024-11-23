@@ -7,7 +7,8 @@
     use App\Http\Controllers\Api\v1\Manager\ManagerController;
     use App\Http\Controllers\Api\V1\Order\OrderController;
     use App\Http\Controllers\Api\V1\Product\ProductController;
-    use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\V1\Supplier\SupplierController;
+use Illuminate\Support\Facades\Route;
 
     //auth actions routes
     Route::controller(AuthController::class)->group(function(){
@@ -67,6 +68,15 @@
         Route::get('orders/{id}', 'show');
         Route::get('orders', 'index');
         Route::delete('orders/{id}', 'destroy');
+    });
+
+    //routes for supplier manipulations
+    Route::controller(SupplierController::class)->group(function(){
+        Route::post('suppliers','store');
+        Route::put('suppliers/{id}','update');
+        Route::get('suppliers/{id}', 'show');
+        Route::get('suppliers', 'index');
+        Route::delete('suppliers/{id}', 'destroy');
     });
 
 

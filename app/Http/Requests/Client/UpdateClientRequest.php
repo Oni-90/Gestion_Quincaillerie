@@ -56,8 +56,8 @@
                 // 'password.confirmed' => 'Les mots de passe ne correspondent pas.',
                 'phone.min' => 'Le numéro de télephone doit contenir au moins 8 chiffres.',
                 'phone.max' => 'Le numéro de télephone doit pas excéder 8 chiffres.',
-                'phone.unique' => 'Cet numéro existe deja dans la base de données.',
-                'email.unique' => 'Cet email existe deja dans la base de données.',
+                'phone.unique' => 'Cet numéro  de télephone est déjà utilisé.',
+                'email.unique' => 'Cet email est déja utlisé.',
             ];
         }
     }
