@@ -29,7 +29,7 @@
          * 
          * @return [type]
          */
-        public function attachProductToOrder(Order $order,Product $product, $attributes)
+        public function attachProductToOrder(Order $order,Product $product,$attributes)
         {
             return $order->products()->attach($product,$attributes);
         }

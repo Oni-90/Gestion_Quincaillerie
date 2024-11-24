@@ -24,7 +24,6 @@
             return [
                 //order data
                 'supplier_id' => 'sometimes|integer|exists:suppliers,id',
-                'total_amount' => 'sometimes|decimal:0,4',
                 'order_date' => 'sometimes|date|before_or_equal:now',
                 'payment_status' => 'sometimes|string',
 
@@ -48,6 +47,7 @@
                 'products.required' => "Vous devez choisir au moins un produit afin de créer la commande.",
                 'product.*.product_id.exists' => "Vous avez selectioné produit qui est introuvable",
                 'products.*.quantity_ordered.decimal' => "La quantité ne doit pas avoir plus de 4 chiffres après la virgule.",
+                'supplier_id.exists' => "Le fournisseur sélectionné n'existe pas.",
             ];
         }
     }

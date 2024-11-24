@@ -40,9 +40,9 @@
                     $orderData = $request->only([
                         'order_date',
                         'supplier_id',
-                        'total_amount',
                         'payment_status',
                     ]);
+                    $orderData['total_amount'] = $this->calculteOrderTotalAmount($request['products']); //total amount calculating function
                     $order = $this->orderRepository->create($orderData); //create order
                     
                     //foreach loop to iterate on products array to associate product to order
@@ -54,7 +54,9 @@
         
                         //attach products selected to order
                         $this->orderRepository->attachProductToOrder($order,$product,[
-                            'quantity_ordered' => $productOrder['quantity_ordered']],
+                            'order_amount' => $product->price * $productOrder['quantity_ordered'],
+                            'quantity_ordered' => $productOrder['quantity_ordered']
+                            ]
                         );
                     }
             }
@@ -74,7 +76,7 @@
 
         /**
          * --------------------------------------
-         * find a specific  to show
+         * find a specific order to show
          * --------------------------------------
          * @param mixed $id
          * 
@@ -87,7 +89,7 @@
             //return a retrieve order
             return response()->json([
                 'message' => "Résultat correspondant :",
-                'order' => $order->load('products'),
+                'order' => $order,
             ],200);
         }
 
@@ -108,9 +110,9 @@
                 $orderData = $request->only([
                     'order_date',
                     'supplier_id',
-                    'total_amount',
                     'payment_status',
                 ]);
+                $orderData['total_amount'] = $this->calculteOrderTotalAmount($request['products']); //total amount calculating function
                 $this->orderRepository->update($findOrder->id,$orderData); //update order data
 
                 //foreach loop to iterate on products array to associate product to order
@@ -122,7 +124,9 @@
 
                     //attach products selected to order
                     $this->orderRepository->attachProductToOrder($findOrder,$product,[
-                        'quantity_ordered' => $productOrder['quantity_ordered']],
+                        'quantity_ordered' => $productOrder['quantity_ordered'],
+                        'order_amount' => $product->price * $productOrder['quantity_ordered'],
+                        ]
                     );
                 }
                 $order = new OrderResource($findOrder); //create new order resource
@@ -174,7 +178,7 @@
             //return retrieve list
             return response()->json([
                 'message' => "Liste de toutes les commandes :",
-                'order' => $order->load('products'),
+                'order' => $order,
             ],200);
         }
 
@@ -194,5 +198,26 @@
                 throw new Exception('Cette commande n\'existe pas.');
             }
             return $order;
+        }
+
+        /**
+         * -------------------------------------------------------
+         * private function for calculating order total amount
+         * -------------------------------------------------------
+         * @param array $products
+         * 
+         * @return [type]
+         */
+        private function calculteOrderTotalAmount(array $products)
+        {
+            $totalAmount = 0; //initialize total amount var
+
+            // iterate on products array to calculate total amount 
+            foreach ($products as $productOrder) {
+                $product = $this->productRepository->find($productOrder['product_id']); //find any product in the array
+
+                $totalAmount += $product->price * $productOrder['quantity_ordered']; //calculate any product total amount and add them to get order total amount
+            }
+            return $totalAmount;
         }
     }

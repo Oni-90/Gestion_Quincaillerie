@@ -23,6 +23,8 @@
             'order_number',
         ];
 
+        protected $with = ['products','supplier']; //return order with supplier and product data
+
         /**s
          * ----------------------------------------------------------------
          * define relationship with product and call the pivot table
@@ -31,7 +33,7 @@
          */
         public function products()
         {
-            return $this->belongsToMany(Product::class,'product_order')->withPivot('quantity_ordered');
+            return $this->belongsToMany(Product::class,'product_order')->withPivot('quantity_ordered','order_amount');
         }
 
         /**
