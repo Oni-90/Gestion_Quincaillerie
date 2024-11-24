@@ -7,8 +7,9 @@
     use App\Http\Controllers\Api\v1\Manager\ManagerController;
     use App\Http\Controllers\Api\V1\Order\OrderController;
     use App\Http\Controllers\Api\V1\Product\ProductController;
-use App\Http\Controllers\Api\V1\Supplier\SupplierController;
-use Illuminate\Support\Facades\Route;
+    use App\Http\Controllers\Api\V1\Sale\SaleController;
+    use App\Http\Controllers\Api\V1\Supplier\SupplierController;
+    use Illuminate\Support\Facades\Route;
 
     //auth actions routes
     Route::controller(AuthController::class)->group(function(){
@@ -77,6 +78,15 @@ use Illuminate\Support\Facades\Route;
         Route::get('suppliers/{id}', 'show');
         Route::get('suppliers', 'index');
         Route::delete('suppliers/{id}', 'destroy');
+    });
+
+    //routes for sale mainpulations
+    Route::controller(SaleController::class)->group(function(){
+        Route::post('sales','store');
+        Route::put('sales/{id}','update');
+        Route::get('sales/{id}', 'show');
+        Route::get('sales', 'index');
+        Route::delete('sales/{id}', 'destroy');
     });
 
 

@@ -47,6 +47,18 @@
          */
         public function orders()
         {
-            return $this->belongsToMany(Order::class,'product_order')->withPivot('quantity_ordered');
+            return $this->belongsToMany(Order::class,'product_order')->withPivot('quantity_ordered','order_amount');
+        }
+
+        /**
+         * -----------------------------------------------------------------
+         * define relationship with pivot between sale and product
+         * -----------------------------------------------------------------
+         * 
+         * @return [type]
+         */
+        public function sales()
+        {
+            return $this->belongsToMany(Sale::class,'product_sale')->withPivot('quantity_sold','sale_amount');
         }
     }

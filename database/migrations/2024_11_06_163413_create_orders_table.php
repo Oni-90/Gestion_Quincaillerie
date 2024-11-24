@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('order_number')->unique();
             $table->float('total_amount');
             $table->dateTime('order_date');
-            $table->string('payment_status');
+            $table->string('payment_status')->default('Impayé');
             $table->timestamps();
         });
     }
