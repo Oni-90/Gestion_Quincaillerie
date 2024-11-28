@@ -46,6 +46,7 @@
                 ]);
                 $userData['type'] = 'client';
                 $user = $this->authRepository->create($userData); //save user data
+                $user->assignRole('client'); //assing role client to user
 
                 $clientData = $request->only([
                     'address',

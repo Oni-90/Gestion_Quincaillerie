@@ -6,6 +6,7 @@
     use App\Http\Requests\Auth\AuthRequest;
     use App\Services\Auth\AuthService;
     use Illuminate\Http\Request;
+    use Illuminate\Support\Facades\Auth;
 
     class AuthController extends Controller
     {
@@ -43,8 +44,17 @@
          * 
          * @return [type]
          */
-        public function logout($request)
+        public function logout()
         {
-            return $this->authService->logout($request);
+            return $this->authService->logout();
+        }
+
+        /**
+         * return all authenticated user notifications
+         * @return [type]
+         */
+        public function getNotification()
+        {
+            return response()->json(Auth::user()->notifications);
         }
     }

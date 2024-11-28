@@ -47,6 +47,7 @@
                     ]);
                     $userData['type'] = 'manager';
                     $user = $this->authRepository->create($userData); //store user data
+                    $user->assignRole('manager'); //assign role manager to user
                     
                     $managerData = $request->only([
                         'address',

@@ -38,5 +38,18 @@
 
             return $userForLogin;
         }
+
+        /**
+         * --------------------------------------------
+         * get all user with role admin or manager
+         * --------------------------------------------
+         * @return [type]
+         */
+        public function retrieveUserWithRoleAdminOrManager()
+        {
+            $retrieveUser = $this->user->where('type','admin')->get();
+
+            return $retrieveUser;
+        }
         
     }
