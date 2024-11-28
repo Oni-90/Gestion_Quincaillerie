@@ -6,11 +6,14 @@
     use App\Repositories\Product\ProductRepository;
     use Exception;
     use Illuminate\Http\Request;
+    use App\Notifications\Product\ProductAlertNotification;
+    use App\Repositories\Auth\AuthRepository;
 
     class SaleService
     {
         private $saleRepository;
         private $productRepository;
+        private $authRepository;
 
         /**
          * -----------------------------------------------------
@@ -19,10 +22,11 @@
          * @param ProductRepository $productRepository
          * @param SaleRepository $saleRepository
          */
-        public function __construct(ProductRepository $productRepository,SaleRepository $saleRepository)
+        public function __construct(ProductRepository $productRepository,SaleRepository $saleRepository,AuthRepository $authRepository)
         {
             $this->saleRepository = $saleRepository;
             $this->productRepository = $productRepository;
+            $this->authRepository = $authRepository;
         }
 
         /**
@@ -46,8 +50,8 @@
                 //iterate over the product array to attach product to sale
                 foreach ($request['products'] as $productSale) {
                     $product = $this->productRepository->find($productSale['product_id']); //find product to associate to sale
-
-                    //check available quantity
+                    
+                    //check available quantity 
                     if($product->quantity < $productSale['quantity_sold']){
                         return response()->json([
                             'message' => "La quantité en stock est insuffisante pour le produit {$product->name}. Disponible:{$product->quantity}, Demandé:{$productSale['quantity_sold']} "
@@ -55,6 +59,11 @@
                     }
                     $product->quantity -= $productSale['quantity_sold']; //subtract quantity sold from available quantity
                     $product->save(); //save it
+
+                    //check alert threshold
+                    if($product->quantity <= $product->alert_threshold){
+                        $this->sendProductAlertNotification($product); //call send product alert function
+                    }
 
                     //attach product to created sale 
                     $this->saleRepository->attachProductTosale($sale,$product,[
@@ -130,6 +139,11 @@
                         }
                         $product->quantity -= $productSale['quantity_sold']; //subtract quantity sold from available quantity
                         $product->save(); //save it
+
+                        //check alert threshold
+                        if($product->quantity <= $product->alert_threshold){
+                        $this->sendProductAlertNotification($product); //call to send product alert function
+                    }
 
                         //attach product to updated sale 
                         $this->saleRepository->attachProductTosale($findSale,$product,[
@@ -229,5 +243,29 @@
                 $totalAmount += $product->price * $productSale['quantity_sold']; //calculate any product sale amount and add them to get total amount
             }
             return $totalAmount;
+        }
+
+        /**
+         * ----------------------------------------------------
+         * private function to send product threshold alert 
+         * to all user with role admin or manager
+         * -----------------------------------------------------
+         * @param mixed $product
+         * 
+         * @return [type]
+         */
+        private function sendProductAlertNotification($product)
+        {
+            $users = $this->authRepository->retrieveUserWithRoleAdminOrManager(); //retrieve user with role admin or manager
+
+            //iterate over user array and send notification to all
+            foreach ($users as $user) {
+                $user->notify(new ProductAlertNotification($product));
+            }
+
+            //return success sending message
+            return response()->json([
+                'message' => "Alerte envoyée avec succès.",
+            ],200);
         }
     }

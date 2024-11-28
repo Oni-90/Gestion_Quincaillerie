@@ -2,13 +2,10 @@
 
     namespace App\Services\Auth;
 
-    // use App\Http\Helpers\JWTAuth;
     use App\Http\Requests\Auth\AuthRequest;
     use App\Repositories\Auth\AuthRepository;
     use Exception;
     use Illuminate\Support\Facades\Auth;
-    use Illuminate\Support\Facades\Hash;
-    use Tymon\JWTAuth\Facades\JWTAuth;
 
     class AuthService
     {
@@ -35,25 +32,11 @@
          */
         public function login(AuthRequest $request)
         {
-            $userForLogin = $this->authRepository->retrieveUserForLogin($request->email);
-
-            if(!$userForLogin)
-            {
-                return response()->json([
-                    'token' => '',
-                    'message' => 'Email ou Mot de passe incorrecte.'
-                ],404);
-            }
+            $userForLogin = $request->validated();
 
             try {
-
-                if($userForLogin && Hash::check($request['password'] ,$userForLogin->password))
-                {
-                    Auth::user();
-                    // auth()->user();
-                    $token = JWTAuth::fromUser($userForLogin);
-
-                $cookie = cookie('jwt-token', $token, 60 * 24);
+                if (! $token = Auth::attempt($userForLogin)) {
+                    return response()->json(['error' => 'Email ou Mot de passe incorrecte.'], 401);
                 }
             } 
             catch (Exception $exception) {
@@ -68,7 +51,7 @@
                 'token' => $token,
                 'auth' => Auth::user(),
                 'message' => "Token généré pour l'authentification",
-                'cookie' => $cookie,
+                // 'cookie' => $cookie,
             ]);
         }
 
@@ -80,20 +63,19 @@
          * 
          * @return [type]
          */
-        public function logout($request)
+        public function logout()
         {
             try {
                 Auth::logout();
-
-                return response()->json([
-                    'message' => "Déconnexion réeussi",
-                    'success' => true,
-                ],200);
-            } catch (\Tymon\JWTAuth\Exceptions\UserNotDefinedException $exception) {
+            } catch (Exception $exception) {
                 return response()->json([
                     'message' => "Vous n'êtes pas authentifié",
                     'error' => $exception->getMessage()
                 ],404);
             }
+            return response()->json([
+                'message' => "Déconnexion réeussi",
+                'success' => true,
+            ],200);
         }
     }
